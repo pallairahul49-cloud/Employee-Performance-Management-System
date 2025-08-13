@@ -8,6 +8,7 @@ import com.assignment.employeemanagement.repositories.EmployeeRepository;
 import com.assignment.employeemanagement.repositories.PerformanceReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,7 +21,10 @@ public class EmployeeService {
     @Autowired
     private PerformanceReviewRepository reviewRepository;
 
-    public List<Employee> getEmployees(List<String> departments, List<String> projects, Double score, LocalDate reviewDate) {
+    public List<Employee> getEmployees(List<String> departments,
+                                       List<String> projects,
+                                       Double score,
+                                       LocalDate reviewDate) {
         return employeeRepository.findEmployeesWithFilters(
                 (departments != null && !departments.isEmpty()) ? departments : null,
                 (projects != null && !projects.isEmpty()) ? projects : null,
@@ -31,7 +35,7 @@ public class EmployeeService {
 
     public EmployeeDetailDTO getEmployeeDetail(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + employeeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
 
         List<PerformanceReview> last3Reviews =
                 reviewRepository.findTop3ByEmployeeIdOrderByReviewDateDesc(employeeId);

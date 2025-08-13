@@ -27,7 +27,6 @@ public class EmployeeController {
         return employeeService.getEmployees(departments, projects, score, reviewDate);
     }
 
-    // 2. Get detailed info for one employee
     @GetMapping("/{id}")
     public EmployeeDetailDTO getEmployeeDetails(@PathVariable Long id) {
         return employeeService.getEmployeeDetail(id);

@@ -10,10 +10,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "JOIN e.department d " +
             "LEFT JOIN e.projects p " +
             "LEFT JOIN PerformanceReview pr ON pr.employee = e " +
-            "WHERE (:departmentNames IS NULL OR LOWER(d.name) LIKE ANY " +
-            "       (SELECT CONCAT('%', LOWER(dep), '%') FROM java.util.List dep IN :departmentNames)) " +
-            "AND (:projectNames IS NULL OR LOWER(p.name) LIKE ANY " +
-            "       (SELECT CONCAT('%', LOWER(proj), '%') FROM java.util.List proj IN :projectNames)) " +
+            "WHERE (:departmentNames IS NULL OR " +
+            "   EXISTS (SELECT 1 FROM Department dep WHERE dep = e.department AND " +
+            "       LOWER(dep.name) LIKE ANY (SELECT CONCAT('%', LOWER(name), '%') FROM java.util.List name IN :departmentNames))) " +
+            "AND (:projectNames IS NULL OR " +
+            "   EXISTS (SELECT 1 FROM Project proj WHERE proj MEMBER OF e.projects AND " +
+            "       LOWER(proj.name) LIKE ANY (SELECT CONCAT('%', LOWER(name), '%') FROM java.util.List name IN :projectNames))) " +
             "AND (:score IS NULL OR pr.score = :score) " +
             "AND (:reviewDate IS NULL OR pr.reviewDate = :reviewDate)")
     List<Employee> findEmployeesWithFilters(
