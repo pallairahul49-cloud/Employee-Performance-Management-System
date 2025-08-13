@@ -25,7 +25,7 @@ public class EmployeeService {
                                        List<String> projects,
                                        Double score,
                                        LocalDate reviewDate) {
-        return employeeRepository.findEmployeesWithFilters(
+        return employeeRepository.findAllWithFilters(
                 (departments != null && !departments.isEmpty()) ? departments : null,
                 (projects != null && !projects.isEmpty()) ? projects : null,
                 score != null ? score : null,

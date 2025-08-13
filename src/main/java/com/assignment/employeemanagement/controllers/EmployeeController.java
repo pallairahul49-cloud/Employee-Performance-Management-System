@@ -17,6 +17,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    // Pass score & reviewDate to the service
     @GetMapping
     public List<Employee> getEmployees(
             @RequestParam(required = false) List<String> departments,
