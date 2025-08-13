@@ -1,0 +1,27 @@
+package com.assignment.employeemanagement.controllers;
+
+import com.assignment.employeemanagement.dto.EmployeeDetailDTO;
+import com.assignment.employeemanagement.entities.Employee;
+import com.assignment.employeemanagement.services.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/employees")
+public class EmployeeController {
+    @Autowired
+    private EmployeeService employeeService;
+
+    @GetMapping
+    public List<Employee> getEmployees(
+            @RequestParam(required = false) List<String> departments,
+            @RequestParam(required = false) List<String> projects) {
+        return employeeService.getEmployees(departments, projects);
+    }
+
+    @GetMapping("/{id}")
+    public EmployeeDetailDTO getEmployeeDetails(@PathVariable Long id) {
+        return employeeService.getEmployeeDetail(id);
+    }
+}
