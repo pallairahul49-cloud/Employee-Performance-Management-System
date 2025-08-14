@@ -1,14 +1,13 @@
 package com.assignment.employeemanagement.repositories;
 
 import com.assignment.employeemanagement.entities.Employee;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.time.LocalDate;
 import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-
     @Query("SELECT DISTINCT e FROM Employee e " +
             "JOIN e.department d " +
             "LEFT JOIN e.projects p " +

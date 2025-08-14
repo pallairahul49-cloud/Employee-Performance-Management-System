@@ -1,7 +1,7 @@
 package com.assignment.employeemanagement.entities;
+
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
 
 @Entity
@@ -11,11 +11,12 @@ import java.time.LocalDate;
 @Table(name = "performance_review")
 public class PerformanceReview {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
+    @ToString.Exclude
     private Employee employee;
 
     private LocalDate reviewDate;
