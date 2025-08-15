@@ -1,0 +1,64 @@
+{
+    "info": {
+        "name": "Employee API Tests",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get all employees (no filters)",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/employees"
+            }
+        },
+        {
+            "name": "Filter by departments",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/employees?departments=Engineering,Sales"
+            }
+        },
+        {
+            "name": "Filter by projects",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/employees?projects=Project Apollo"
+            }
+        },
+        {
+            "name": "Filter by departments + projects",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/employees?departments=Engineering,Sales&projects=Project Apollo"
+            }
+        },
+        {
+            "name": "Filter by score only",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/employees?score=4.5"
+            }
+        },
+        {
+            "name": "Filter by score + review date",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/employees?score=4.5&reviewDate=2024-01-15"
+            }
+        },
+        {
+            "name": "Filter by departments + projects + score + review date",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/employees?departments=Engineering,Sales&projects=Project Apollo&score=4.5&reviewDate=2024-01-15"
+            }
+        },
+        {
+            "name": "Get detailed employee information (by ID)",
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/employees/1"
+            }
+        }
+    ]
+}
