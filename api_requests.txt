@@ -1,0 +1,31 @@
+1. Get all employees (no filters)
+
+GET http://localhost:8080/api/employees
+
+2. Filter by departments
+
+GET http://localhost:8080/api/employees?departments=Engineering,Sales
+
+3. Filter by projects
+
+GET http://localhost:8080/api/employees?projects=Project Apollo
+
+4. Filter by departments + projects
+
+GET http://localhost:8080/api/employees?departments=Engineering,Sales&projects=Project Apollo
+
+5. Filter by score only
+
+GET http://localhost:8080/api/employees?score=4.5
+
+6. Filter by score + review date
+
+GET http://localhost:8080/api/employees?score=4.5&reviewDate=2024-01-15
+
+7. Filter by departments + projects + score + review date (full filter)
+
+GET http://localhost:8080/api/employees?departments=Engineering,Sales&projects=Project Apollo&score=4.5&reviewDate=2024-01-15
+
+8. Get detailed employee information (by ID)
+
+GET http://localhost:8080/api/employees/1
