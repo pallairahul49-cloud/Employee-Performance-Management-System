@@ -16,4 +16,7 @@ public class EmployeeFilterDTO {
     
     private Double minScore;
     private Double maxScore;
+    
+    // New field for simple score filtering
+    private Double score;
 }

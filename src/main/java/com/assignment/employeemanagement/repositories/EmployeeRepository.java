@@ -19,6 +19,50 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     );
 
     @Query("SELECT DISTINCT e FROM Employee e " +
+            "JOIN e.department d " +
+            "LEFT JOIN e.employeeProjects ep " +
+            "LEFT JOIN ep.project p " +
+            "JOIN e.performanceReviews pr " +
+            "WHERE (:departmentNames IS NULL OR d.name IN :departmentNames) " +
+            "AND (:projectNames IS NULL OR p.name IN :projectNames) " +
+            "AND pr.score = :score")
+    List<Employee> findAllWithScoreFilter(
+            @Param("departmentNames") List<String> departmentNames,
+            @Param("projectNames") List<String> projectNames,
+            @Param("score") Double score
+    );
+
+    @Query("SELECT DISTINCT e FROM Employee e " +
+            "JOIN e.department d " +
+            "LEFT JOIN e.employeeProjects ep " +
+            "LEFT JOIN ep.project p " +
+            "JOIN e.performanceReviews pr " +
+            "WHERE (:departmentNames IS NULL OR d.name IN :departmentNames) " +
+            "AND (:projectNames IS NULL OR p.name IN :projectNames) " +
+            "AND pr.reviewDate = :reviewDate " +
+            "AND pr.score = :score")
+    List<Employee> findAllWithScoreAndDate(
+            @Param("departmentNames") List<String> departmentNames,
+            @Param("projectNames") List<String> projectNames,
+            @Param("reviewDate") LocalDate reviewDate,
+            @Param("score") Double score
+    );
+
+    @Query("SELECT DISTINCT e FROM Employee e " +
+            "JOIN e.department d " +
+            "LEFT JOIN e.employeeProjects ep " +
+            "LEFT JOIN ep.project p " +
+            "JOIN e.performanceReviews pr " +
+            "WHERE (:departmentNames IS NULL OR d.name IN :departmentNames) " +
+            "AND (:projectNames IS NULL OR p.name IN :projectNames) " +
+            "AND pr.reviewDate = :reviewDate")
+    List<Employee> findAllWithDateOnly(
+            @Param("departmentNames") List<String> departmentNames,
+            @Param("projectNames") List<String> projectNames,
+            @Param("reviewDate") LocalDate reviewDate
+    );
+
+    @Query("SELECT DISTINCT e FROM Employee e " +
             "JOIN e.performanceReviews pr " +
             "WHERE pr.reviewDate = :reviewDate " +
             "AND pr.score >= :minScore " +

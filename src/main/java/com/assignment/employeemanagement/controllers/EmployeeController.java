@@ -24,7 +24,8 @@ public class EmployeeController {
             @RequestParam(required = false) List<String> projects,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate reviewDate,
             @RequestParam(required = false) Double minScore,
-            @RequestParam(required = false) Double maxScore) {
+            @RequestParam(required = false) Double maxScore,
+            @RequestParam(required = false) Double score) {
         
         EmployeeFilterDTO filterDTO = new EmployeeFilterDTO();
         filterDTO.setDepartments(departments);
@@ -32,15 +33,16 @@ public class EmployeeController {
         filterDTO.setReviewDate(reviewDate);
         filterDTO.setMinScore(minScore);
         filterDTO.setMaxScore(maxScore);
+        filterDTO.setScore(score);
         
         List<EmployeeResponseDTO> employees = employeeService.getEmployeesWithFilters(filterDTO);
         return ResponseEntity.ok(employees);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDetailDTO> getEmployeeDetails(@PathVariable Long id) {
-        EmployeeDetailDTO employeeDetail = employeeService.getEmployeeDetail(id);
-        return ResponseEntity.ok(employeeDetail);
+    public ResponseEntity<EmployeeDetailDTO> getEmployeeById(@PathVariable Long id) {
+        EmployeeDetailDTO employee = employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(employee);
     }
 
     // Legacy endpoint for backward compatibility

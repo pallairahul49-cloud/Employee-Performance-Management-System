@@ -26,17 +26,43 @@ public class EmployeeService {
     public List<EmployeeResponseDTO> getEmployeesWithFilters(EmployeeFilterDTO filterDTO) {
         List<Employee> employees;
         
-        // If performance score filter is applied
-        if (filterDTO.getReviewDate() != null && filterDTO.getMinScore() != null && filterDTO.getMaxScore() != null) {
-            employees = employeeRepository.findAllWithAllFilters(
+        // If reviewDate is provided, use date-based filtering (more specific)
+        if (filterDTO.getReviewDate() != null) {
+            if (filterDTO.getScore() != null) {
+                // Use exact score on specific date
+                employees = employeeRepository.findAllWithScoreAndDate(
+                    filterDTO.getDepartments(),
+                    filterDTO.getProjects(),
+                    filterDTO.getReviewDate(),
+                    filterDTO.getScore()
+                );
+            } else if (filterDTO.getMinScore() != null && filterDTO.getMaxScore() != null) {
+                // Use score range on specific date
+                employees = employeeRepository.findAllWithAllFilters(
+                    filterDTO.getDepartments(),
+                    filterDTO.getProjects(),
+                    filterDTO.getReviewDate(),
+                    filterDTO.getMinScore(),
+                    filterDTO.getMaxScore()
+                );
+            } else {
+                // Just filter by date without score
+                employees = employeeRepository.findAllWithDateOnly(
+                    filterDTO.getDepartments(),
+                    filterDTO.getProjects(),
+                    filterDTO.getReviewDate()
+                );
+            }
+        }
+        // If only score is provided (without date)
+        else if (filterDTO.getScore() != null) {
+            employees = employeeRepository.findAllWithScoreFilter(
                 filterDTO.getDepartments(),
                 filterDTO.getProjects(),
-                filterDTO.getReviewDate(),
-                filterDTO.getMinScore(),
-                filterDTO.getMaxScore()
+                filterDTO.getScore()
             );
         } else {
-            // Basic filtering without performance score
+            // Basic filtering without performance score or date
             employees = employeeRepository.findAllWithFilters(
                 filterDTO.getDepartments(),
                 filterDTO.getProjects()
@@ -52,13 +78,50 @@ public class EmployeeService {
         return employeeRepository.findAllWithFilters(departments, projects);
     }
 
-    public EmployeeDetailDTO getEmployeeDetail(Long employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
+    public EmployeeDetailDTO getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
         
-        List<PerformanceReview> last3Reviews = reviewRepository.findTop3ByEmployeeIdOrderByReviewDateDesc(employeeId);
+        // Get last 3 performance reviews
+        List<PerformanceReview> reviews = reviewRepository.findTop3ByEmployeeOrderByReviewDateDesc(employee);
         
-        return new EmployeeDetailDTO(employee, last3Reviews);
+        // Map to DTO to avoid circular references
+        EmployeeDetailDTO dto = new EmployeeDetailDTO();
+        dto.setId(employee.getId());
+        dto.setName(employee.getName());
+        dto.setEmail(employee.getEmail());
+        dto.setDateOfJoining(employee.getDateOfJoining());
+        dto.setSalary(employee.getSalary());
+        
+        // Set department info
+        if (employee.getDepartment() != null) {
+            dto.setDepartmentName(employee.getDepartment().getName());
+            dto.setDepartmentBudget(employee.getDepartment().getBudget());
+        }
+        
+        // Set manager info
+        if (employee.getManager() != null) {
+            dto.setManagerName(employee.getManager().getName());
+        }
+        
+        // Set projects
+        dto.setProjects(employee.getProjectNames());
+        
+        // Map performance reviews
+        List<EmployeeDetailDTO.PerformanceReviewDTO> reviewDtos = reviews.stream()
+                .map(review -> {
+                    EmployeeDetailDTO.PerformanceReviewDTO reviewDto = new EmployeeDetailDTO.PerformanceReviewDTO();
+                    reviewDto.setId(review.getId());
+                    reviewDto.setReviewDate(review.getReviewDate());
+                    reviewDto.setScore(review.getScore());
+                    reviewDto.setReviewComments(review.getReviewComments());
+                    return reviewDto;
+                })
+                .collect(Collectors.toList());
+        
+        dto.setLast3Reviews(reviewDtos);
+        
+        return dto;
     }
 
     private EmployeeResponseDTO convertToResponseDTO(Employee employee) {

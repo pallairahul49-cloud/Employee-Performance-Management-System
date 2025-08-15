@@ -1,25 +1,27 @@
 package com.assignment.employeemanagement.dto;
-import com.assignment.employeemanagement.entities.*;
-import lombok.*;
+
+import lombok.Data;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class EmployeeDetailDTO {
     private Long id;
     private String name;
     private String email;
     private String departmentName;
+    private Double departmentBudget;
+    private LocalDate dateOfJoining;
+    private Double salary;
+    private String managerName;
     private List<String> projects;
-    private List<PerformanceReview> last3Reviews;
-
-    public EmployeeDetailDTO(Employee e, List<PerformanceReview> reviews) {
-        this.id = e.getId();
-        this.name = e.getName();
-        this.email = e.getEmail();
-        this.departmentName = e.getDepartment() != null ? e.getDepartment().getName() : null;
-        this.projects = e.getProjectNames();
-        this.last3Reviews = reviews;
+    private List<PerformanceReviewDTO> last3Reviews;
+    
+    @Data
+    public static class PerformanceReviewDTO {
+        private Long id;
+        private LocalDate reviewDate;
+        private Double score;
+        private String reviewComments;
     }
 }
