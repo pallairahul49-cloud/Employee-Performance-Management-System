@@ -1,5 +1,6 @@
-use employee;
+USE employee;
 
+-- Department data
 INSERT INTO department (id, name, budget) VALUES
 (1, 'Engineering', 1000000),
 (2, 'Human Resources', 300000),
@@ -12,6 +13,7 @@ INSERT INTO department (id, name, budget) VALUES
 (9, 'R&D', 900000),
 (10, 'Operations', 550000);
 
+-- Project data
 INSERT INTO project (id, name, start_date, end_date, department_id) VALUES
 (1, 'Project Apollo', '2024-01-01', '2024-06-30', 1),
 (2, 'Recruitment Drive 2024', '2024-02-01', '2024-04-30', 2),
@@ -24,6 +26,7 @@ INSERT INTO project (id, name, start_date, end_date, department_id) VALUES
 (9, 'New Product Development', '2024-01-01', '2024-12-31', 9),
 (10, 'Operational Efficiency', '2024-05-01', '2024-10-31', 10);
 
+-- Employee data
 INSERT INTO employee (id, name, email, department_id, date_of_joining, salary, manager_id) VALUES
 (1, 'Alice Johnson', 'alice.johnson@example.com', 1, '2020-01-10', 90000, NULL),
 (2, 'Bob Smith', 'bob.smith@example.com', 1, '2021-03-15', 75000, 1),
@@ -36,18 +39,7 @@ INSERT INTO employee (id, name, email, department_id, date_of_joining, salary, m
 (9, 'Ivy Wilson', 'ivy.wilson@example.com', 9, '2016-09-30', 95000, NULL),
 (10, 'Jack Davis', 'jack.davis@example.com', 10, '2015-12-01', 72000, NULL);
 
-INSERT INTO employee_project (employee_id, project_id) VALUES
-(1, 1),
-(2, 1),
-(3, 2),
-(4, 3),
-(5, 4),
-(6, 5),
-(7, 6),
-(8, 7),
-(9, 9),
-(10, 10);
-
+-- Employee project assignments (with assigned_date and role)
 INSERT INTO employee_project (employee_id, project_id, assigned_date, role) VALUES
 (1, 1, '2024-01-01', 'Lead Engineer'),
 (2, 1, '2024-02-01', 'Software Developer'),
@@ -60,9 +52,12 @@ INSERT INTO employee_project (employee_id, project_id, assigned_date, role) VALU
 (9, 9, '2024-01-01', 'Product Manager'),
 (10, 10, '2024-05-01', 'Operations Analyst');
 
+-- Performance reviews (no duplicates)
 INSERT INTO performance_review (employee_id, review_date, score, review_comments) VALUES
 (1, '2024-01-15', 4.5, 'Excellent leadership on Project Apollo'),
 (1, '2023-07-15', 4.2, 'Consistent good performance'),
+(1, '2022-12-10', 4.3, 'Strong contribution to multiple Engineering projects'),
+(1, '2021-08-05', 4.4, 'Delivered critical module ahead of deadline'),
 (2, '2024-01-10', 4.0, 'Strong technical skills'),
 (3, '2023-12-01', 3.8, 'Reliable and punctual'),
 (4, '2023-11-20', 4.1, 'Good sales results'),
@@ -71,8 +66,3 @@ INSERT INTO performance_review (employee_id, review_date, score, review_comments
 (7, '2023-11-15', 3.7, 'Excellent customer support'),
 (8, '2024-03-05', 4.0, 'Key contributor to network upgrade'),
 (9, '2024-03-15', 4.6, 'Exceptional product development');
-
-
-
-
-
